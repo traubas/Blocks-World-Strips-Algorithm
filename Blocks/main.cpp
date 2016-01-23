@@ -237,12 +237,14 @@ std::stack<std::string> STRIPS(hw2stack& initialstack,hw2stack& goalstack) {
 					checkStack(goalstack);
 					initialstack.UNSTACK(initialstack.getBlock(originalblock),initialstack.getBlock(blockunder));
 					goalstack.pop();
+					plan.push("UNSTACK("+originalblock+","+blockunder+")");
 					checkStack(goalstack);
 					goalstack.pop();
 					checkStack(goalstack);
 					goalstack.pop();
 					checkStack(goalstack);
 					initialstack.PUTDOWN(initialstack.getBlock(originalblock));
+					plan.push("PUTDOWN("+originalblock+")");
 					goalstack.pop();
 				}
 				else {//not clear and not on table
