@@ -172,6 +172,16 @@ hw2stack& hw2stack::printtable() {//needs fixing
 	int flag1=0;
 	int flag2=0;
 	std::string temp;
+	/*this part is for saving the original colors of the console*/
+	HANDLE h = GetStdHandle ( STD_OUTPUT_HANDLE );
+	WORD wOldColorAttrs;
+	CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
+	 GetConsoleScreenBufferInfo(h, &csbiInfo);
+	wOldColorAttrs = csbiInfo.wAttributes;
+	/*until here*/
+	SetConsoleTextAttribute ( h, FOREGROUND_RED | FOREGROUND_INTENSITY); //sets text color to red
+	arm.printarm();
+	std::cout<<std::endl;
 	for (i=index-1;i>=-1;i--) {
 		for (j=0;j<index;j++) {
 			if (blocksarray[0][j].isontable())
@@ -221,6 +231,8 @@ hw2stack& hw2stack::printtable() {//needs fixing
 			std::cout<<std::endl;
 		}
 	}
+	std::cout<<std::endl;
+	SetConsoleTextAttribute ( h, wOldColorAttrs); //sets the color back to normal
 	return *this;
 }
 hw2stack& hw2stack::ON(Block& A, Block& B) {

@@ -17,6 +17,7 @@ class Arm {
 		Arm& PUTblockDOWN(Block& A);
 		Block& HOLDING();
 		Arm& setempty();
+		Arm& printarm();
 		~Arm();
 
     private:

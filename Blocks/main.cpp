@@ -170,9 +170,23 @@ int main() {
 
 void checkStack(hw2stack& goalstack) { //print the goalstack function
 	std::stack<std::string> temp1;
+	/*this part is for saving the original colors of the console*/
+	HANDLE h = GetStdHandle ( STD_OUTPUT_HANDLE );
+	WORD wOldColorAttrs;
+	CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
+	 GetConsoleScreenBufferInfo(h, &csbiInfo);
+	wOldColorAttrs = csbiInfo.wAttributes;
+	/*until here*/
 	std::cout<<"the goalstack is:"<<std::endl;
 	while(!goalstack.is_empty()) {
-		std::cout<<goalstack.top();
+		if (goalstack.top()[0]=='P' || goalstack.top()[0]=='S' || goalstack.top()[0]=='U') {
+			SetConsoleTextAttribute ( h, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+			std::cout<<goalstack.top();
+			SetConsoleTextAttribute ( h, wOldColorAttrs); 
+		}
+		else {
+			std::cout<<goalstack.top();
+		}
 		temp1.push(goalstack.top());
 		goalstack.pop();
 		std::cout<<std::endl;
@@ -219,6 +233,7 @@ std::stack<std::string> STRIPS(hw2stack& initialstack,hw2stack& goalstack) {
 	std::string temp3;
 	hw2stack temp1;
 	bool satisfied=FALSE;
+
 	while (!goalstack.is_empty()) {
 		teststack.push(goalstack.top());
 		tempstack.push(goalstack.top());
@@ -261,8 +276,10 @@ std::stack<std::string> STRIPS(hw2stack& initialstack,hw2stack& goalstack) {
 					checkStack(goalstack);
 					goalstack.push("ARMEMPTY");
 					checkStack(goalstack);
-					initialstack.UNSTACK(initialstack.getBlock(originalblock),initialstack.getBlock(blockunder));
+					
 					goalstack.pop();
+					initialstack.UNSTACK(initialstack.getBlock(originalblock),initialstack.getBlock(blockunder));
+					initialstack.printtable();
 					plan.push("UNSTACK("+originalblock+","+blockunder+")");
 					checkStack(goalstack);
 					goalstack.pop();
@@ -270,6 +287,7 @@ std::stack<std::string> STRIPS(hw2stack& initialstack,hw2stack& goalstack) {
 					goalstack.pop();
 					checkStack(goalstack);
 					initialstack.PUTDOWN(initialstack.getBlock(originalblock));
+					initialstack.printtable();
 					plan.push("PUTDOWN("+originalblock+")");
 					goalstack.pop();
 				}
@@ -286,14 +304,17 @@ std::stack<std::string> STRIPS(hw2stack& initialstack,hw2stack& goalstack) {
 								goalstack.pop();
 								checkStack(goalstack);
 								initialstack.UNSTACK(initialstack.getBlock(currentblock),initialstack.getBlock(blockunder));
+								initialstack.printtable();
 								plan.push("UNSTACK("+currentblock+","+blockunder+")");
 								temp3=findinstack(currentblock,teststack);
 								if (currentblock!=temp3) {
 									initialstack.STACK(initialstack.getBlock(currentblock),initialstack.getBlock(temp3[1]));
+									initialstack.printtable();
 									plan.push("STACK("+currentblock+","+temp3+")");
 								}
 								else {
 									initialstack.PUTDOWN(initialstack.getBlock(currentblock));
+									initialstack.printtable();
 									plan.push("PUTDOWN("+currentblock+")");
 								}
 								currentblock=blockunder;
@@ -305,8 +326,10 @@ std::stack<std::string> STRIPS(hw2stack& initialstack,hw2stack& goalstack) {
 							goalstack.pop();
 							checkStack(goalstack);
 							initialstack.UNSTACK(initialstack.getBlock(currentblock),initialstack.getBlock(blockunder));
+							initialstack.printtable();
 							plan.push("UNSTACK("+currentblock+","+blockunder+")");
 							initialstack.PUTDOWN(initialstack.getBlock(currentblock));
+							initialstack.printtable();
 							plan.push("PUTDOWN("+currentblock+")");
 							break;
 
@@ -371,8 +394,10 @@ std::stack<std::string> STRIPS(hw2stack& initialstack,hw2stack& goalstack) {
 								goalstack.pop();
 								checkStack(goalstack);
 								initialstack.UNSTACK(initialstack.getBlock(currentblock2),initialstack.getBlock(blockundersecond));
+								initialstack.printtable();
 								plan.push("UNSTACK("+currentblock2+","+blockundersecond+")");
 								initialstack.PUTDOWN(initialstack.getBlock(currentblock2));
+								initialstack.printtable();
 								plan.push("PUTDOWN("+currentblock2+")");
 								currentblock2=blockundersecond;
 								blockundersecond=initialstack.blockunder(initialstack.getBlock(currentblock2));
@@ -409,6 +434,7 @@ std::stack<std::string> STRIPS(hw2stack& initialstack,hw2stack& goalstack) {
 						goalstack.push("ARMEMPTY");
 						checkStack(goalstack);
 						initialstack.PICKUP(initialstack.getBlock(firstblock));
+						initialstack.printtable();
 						goalstack.pop();
 						plan.push("PICKUP("+firstblock+")");
 						checkStack(goalstack);
@@ -417,11 +443,13 @@ std::stack<std::string> STRIPS(hw2stack& initialstack,hw2stack& goalstack) {
 						goalstack.pop();
 						checkStack(goalstack);
 						initialstack.STACK(initialstack.getBlock(firstblock),initialstack.getBlock(secondblock));
+						initialstack.printtable();
 						goalstack.pop();
 						checkStack(goalstack);
 						goalstack.pop();
 						checkStack(goalstack);
 						plan.push("STACK("+firstblock+","+secondblock+")");
+						
 					}
 					else {
 						checkStack(goalstack);
@@ -436,12 +464,14 @@ std::stack<std::string> STRIPS(hw2stack& initialstack,hw2stack& goalstack) {
 						initialstack.UNSTACK(initialstack.getBlock(firstblock),initialstack.getBlock(blockunderfirst));
 						goalstack.pop();
 						plan.push("UNSTACK("+firstblock+","+blockunderfirst+")");
+						initialstack.printtable();
 						checkStack(goalstack);
 						goalstack.pop();
 						checkStack(goalstack);
 						goalstack.pop();
 						initialstack.STACK(initialstack.getBlock(firstblock),initialstack.getBlock(secondblock));
 						plan.push("STACK("+firstblock+","+secondblock+")");
+						initialstack.printtable();
 						goalstack.pop();
 						checkStack(goalstack);
 						goalstack.pop();
@@ -463,8 +493,10 @@ std::stack<std::string> STRIPS(hw2stack& initialstack,hw2stack& goalstack) {
 								checkStack(goalstack);
 								initialstack.UNSTACK(initialstack.getBlock(currentblock1),initialstack.getBlock(blockunderfirst));
 								plan.push("UNSTACK("+currentblock1+","+blockunderfirst+")");
+								initialstack.printtable();
 								initialstack.PUTDOWN(initialstack.getBlock(currentblock1));
 								plan.push("PUTDOWN("+currentblock1+")");
+								initialstack.printtable();
 								currentblock1=blockunderfirst;
 								blockunderfirst=initialstack.blockunder(initialstack.getBlock(currentblock1));
 							}
@@ -475,16 +507,20 @@ std::stack<std::string> STRIPS(hw2stack& initialstack,hw2stack& goalstack) {
 							if (initialstack.getBlock(currentblock1).isontable()) {
 								initialstack.PICKUP(initialstack.getBlock(currentblock1));
 								plan.push("PICKUP("+currentblock1+")");
+								initialstack.printtable();
 							}
 							else {
 							initialstack.UNSTACK(initialstack.getBlock(currentblock1),initialstack.getBlock(blockunderfirst));
 							plan.push("UNSTACK("+currentblock1+","+blockunderfirst+")");
 							}
-							initialstack.STACK(initialstack.getBlock(currentblock1),initialstack.getBlock(secondblock));
-							plan.push("STACK("+currentblock1+","+secondblock+")");
-							checkStack(goalstack);
+							initialstack.printtable();
 							goalstack.pop();
 							checkStack(goalstack);
+							initialstack.STACK(initialstack.getBlock(currentblock1),initialstack.getBlock(secondblock));
+							plan.push("STACK("+currentblock1+","+secondblock+")");
+							initialstack.printtable();
+							checkStack(goalstack);
+							
 							break;
 
 						}
@@ -503,6 +539,7 @@ std::stack<std::string> STRIPS(hw2stack& initialstack,hw2stack& goalstack) {
 				}
 			}
 		}
+		
 		plan=STRIPS(initialstack,goalstack);
 	return plan;
 	

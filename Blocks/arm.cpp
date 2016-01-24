@@ -34,6 +34,43 @@ Arm& Arm::setempty() {
 	arm_empty_=1;
 	return *this;
 }
+Arm& Arm::printarm() {
+	int i;
+	int j;
+	for (i=0;i<3;i++) {
+		for (j=0;j<5;j++) {
+			if (i==0) {
+				std::cout<<"_";
+			}
+			else if (i==1) {
+				if (j==1) {
+					if (B->getName()=="none") {
+						std::cout<<" ";
+					}
+					else {
+						std::cout<<B->getName();
+					}
+				}
+				else if (j==0 || j==2 || j==4) {
+					std::cout<<"|";
+				}
+				else {
+					std::cout<<" ";
+				}
+			}
+			else {
+				if (j==4) {
+					std::cout<<"|";
+				}
+				else {
+					std::cout<<" ";
+				}
+			}
+		}
+		std::cout<<std::endl;
+	}
+	return *this;
+}
 Arm::~Arm() {
 }
 /*gets the name of the block which arm is holding*/
