@@ -56,11 +56,17 @@ click ENTER.
 after the input stage
 just click ENTER to advance throught the algorithm
 the algorithm uses a STACK of commands that looks something like that:
+
 |AB|
+
 |BC|
+
 |__|
+
 which means on the top of the stack is the next command: PUT: A ON B
+
 and the next command on the stack is PUT: B ON C
+
 if the algorithm sees:
 AB
 it will be translated to the set of necessary conditions for it to happen.
