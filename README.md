@@ -12,10 +12,10 @@ since i used some heuristics to solve problems that STRIPS does NOT solve
 when prompted:
  - please enter number of blocks:
  
- +if you will insert 10 for example,
- +the program will create a 10 by 10 array,
- +and will let you use 10 blocks
- +with the names: A,B,C,D,E,F,G,H,I
+ if you will insert 10 for example,
+ the program will create a 10 by 10 array,
+ and will let you use 10 blocks
+ with the names: A,B,C,D,E,F,G,H,I
  
  [currently the program supports up to 10 blocks]
  
@@ -26,13 +26,21 @@ when prompted:
  - ABC
  the program will set the blocks A,B,C on the table in such a way that
  C is ONTABLE
+ 
  B ON C
+ 
  A ON B
+ 
  so a valid input will be:
+ 
  - ABC
+ 
  - DEF
+ 
  - GH
+ 
  - I
+ 
  after each stack click ENTER to enter the next stack.
  when finished enter:
  - 1 (one)
