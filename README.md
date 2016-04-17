@@ -12,10 +12,10 @@ since i used some heuristics to solve problems that STRIPS does NOT solve
 when prompted:
  - please enter number of blocks:
  
- if you will insert 10 for example,
- the program will create a 10 by 10 array,
- and will let you use 10 blocks
- with the names: A,B,C,D,E,F,G,H,I
+ +if you will insert 10 for example,
+ +the program will create a 10 by 10 array,
+ +and will let you use 10 blocks
+ +with the names: A,B,C,D,E,F,G,H,I
  
  [currently the program supports up to 10 blocks]
  
